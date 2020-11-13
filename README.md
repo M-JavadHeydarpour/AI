@@ -1,2 +1,2 @@
 # AI
-this repo created forartificial intelligence projects
+this repo created for artificial intelligence projects such as A* algorithm. I complete this repo very soon :) 
