@@ -4,68 +4,6 @@ from resources.Node import *
 from resources.PriorityQueue import *
 
 
-# def ucs(graph, key_node_start='', key_node_goal='', verbose=True):
-#     # UCS lookalikes Dijkstra Algorithm
-#
-#     queue = PriorityQueue()  # init a pQueue
-#
-#     key_node_start = Node(key_node_start, None)
-#     key_node_goal = Node(key_node_goal, None)
-#     key_node_goal.g = 500
-#     # get the neighbours of initial node
-#     neighbours = graph.get(key_node_start.name)
-#
-#     # adds the keys of successors in priority queue
-#
-#     for key, value in neighbours.items():
-#         neighbour = Node(key, key_node_start)
-#         # each item of queue is a tuple (key, cumulative_cost)
-#         queue.insert((neighbour, neighbour.g), neighbour.g)
-#
-#     reached_goal, cumulative_cost_goal = False, -1
-#
-#     while not queue.is_empty():
-#         # remove item of queue, remember: item of queue is a tuple (key, cumulative_cost)
-#         key_current_node, cost_node = queue.remove()
-#         # print(key_current_node, 'key current node')
-#         print(key_node_goal)
-#         # key_current_node = Node(key_current_node[0], key_current_node[1])
-#         if key_current_node == key_node_goal:
-#             reached_goal, cumulative_cost_goal = True, key_current_node.g
-#             break
-#
-#         if verbose:
-#             # shows a friendly message
-#             print('Expands node \'%s\' with cumulative cost %s ...' % (key_current_node, cost_node))
-#             # time.sleep(2)
-#
-#         # get all successors of key_current_node
-#         # print(key_current_node)
-#         neighbours = graph.get(key_current_node.name)
-#
-#         if neighbours:  # checks if contains successors
-#             # insert all successors of key_current_node in the queue
-#             for neighbour in neighbours:
-#                 cumulative_cost = key_current_node.g \
-#                                   + graph.get(key_current_node.name, neighbour)
-#                 # cumulative_cost = graph.getWeightEdge(key_current_node, neighbour) + cost_node
-#                 queue.insert((neighbour, cumulative_cost), cumulative_cost)
-#
-#     if reached_goal:
-#         print('\nReached goal! Cost: %s\n' % cumulative_cost_goal)
-#     else:
-#         print('\nUnfulfilled goal.\n')
-# class Graph:
-#     def __init__(self):
-#         self.edges = {}
-#         self.weights = {}
-#
-#     def neighbors(self, node):
-#         return self.edges[node]
-#
-#     def get_cost(self, from_node, to_node):
-#         return self.weights[(from_node + to_node)]
-
 def ucs(graph, start, goal):
 
     s = start
