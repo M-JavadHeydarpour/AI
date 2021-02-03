@@ -21,13 +21,14 @@ def bfs(graph, node='A', tag=None):
                 # tag.append(neighbour)
     return tag
 
+
 # test
 
-# graph = {
-#     'A': ['B', 'D'],
-#     'B': ['A', 'C'],
-#     'C': ['B', 'D'],
-#     'D': ['A', 'C'],
-# }
-#
-# print(bfs(graph))
+graph = {
+    'A': ['B', 'D'],
+    'B': ['A', 'C'],
+    'C': ['B', 'D'],
+    'D': ['A', 'C'],
+}
+
+print(bfs(graph))

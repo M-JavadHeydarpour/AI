@@ -1,3 +1,0 @@
-import os
-
-os.system("python3 ~/activity/projects/AI/resources/IDDFS.py ~/activity/projects/AI/resources/romania Arad Bucharest")

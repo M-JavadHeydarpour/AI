@@ -1,86 +1,127 @@
-import time
+# import time
 from resources.Graph import *
+from resources.Node import *
 from resources.PriorityQueue import *
 
 
-def run(graph, key_node_start, key_node_goal, verbose=False, time_sleep=0):
-    if key_node_start not in graph.getNodes() or key_node_goal not in graph.getNodes():
-        print('Error: key_node_start \'%s\' or key_node_goal \'%s\' not exists!!' % (key_node_start, key_node_goal))
-    else:
-        # UCS uses priority queue, priority is the cumulative cost (smaller cost)
-        queue = PriorityQueue()
+# def ucs(graph, key_node_start='', key_node_goal='', verbose=True):
+#     # UCS lookalikes Dijkstra Algorithm
+#
+#     queue = PriorityQueue()  # init a pQueue
+#
+#     key_node_start = Node(key_node_start, None)
+#     key_node_goal = Node(key_node_goal, None)
+#     key_node_goal.g = 500
+#     # get the neighbours of initial node
+#     neighbours = graph.get(key_node_start.name)
+#
+#     # adds the keys of successors in priority queue
+#
+#     for key, value in neighbours.items():
+#         neighbour = Node(key, key_node_start)
+#         # each item of queue is a tuple (key, cumulative_cost)
+#         queue.insert((neighbour, neighbour.g), neighbour.g)
+#
+#     reached_goal, cumulative_cost_goal = False, -1
+#
+#     while not queue.is_empty():
+#         # remove item of queue, remember: item of queue is a tuple (key, cumulative_cost)
+#         key_current_node, cost_node = queue.remove()
+#         # print(key_current_node, 'key current node')
+#         print(key_node_goal)
+#         # key_current_node = Node(key_current_node[0], key_current_node[1])
+#         if key_current_node == key_node_goal:
+#             reached_goal, cumulative_cost_goal = True, key_current_node.g
+#             break
+#
+#         if verbose:
+#             # shows a friendly message
+#             print('Expands node \'%s\' with cumulative cost %s ...' % (key_current_node, cost_node))
+#             # time.sleep(2)
+#
+#         # get all successors of key_current_node
+#         # print(key_current_node)
+#         neighbours = graph.get(key_current_node.name)
+#
+#         if neighbours:  # checks if contains successors
+#             # insert all successors of key_current_node in the queue
+#             for neighbour in neighbours:
+#                 cumulative_cost = key_current_node.g \
+#                                   + graph.get(key_current_node.name, neighbour)
+#                 # cumulative_cost = graph.getWeightEdge(key_current_node, neighbour) + cost_node
+#                 queue.insert((neighbour, cumulative_cost), cumulative_cost)
+#
+#     if reached_goal:
+#         print('\nReached goal! Cost: %s\n' % cumulative_cost_goal)
+#     else:
+#         print('\nUnfulfilled goal.\n')
+# class Graph:
+#     def __init__(self):
+#         self.edges = {}
+#         self.weights = {}
+#
+#     def neighbors(self, node):
+#         return self.edges[node]
+#
+#     def get_cost(self, from_node, to_node):
+#         return self.weights[(from_node + to_node)]
 
-        # expands initial node
+def ucs(graph, start, goal):
 
-        # get the keys of all successors of initial node
-        keys_successors = graph.getSuccessors(key_node_start)
+    s = start
+    visited = set()
+    queue = PriorityQueue()
 
-        # adds the keys of successors in priority queue
-        for key_sucessor in keys_successors:
-            weight = graph.getWeightEdge(key_node_start, key_sucessor)
-            # each item of queue is a tuple (key, cumulative_cost)
-            queue.insert((key_sucessor, weight), weight)
+    start = Node(start, None)
 
-        reached_goal, cumulative_cost_goal = False, -1
-        while not queue.is_empty():
-            # remove item of queue, remember: item of queue is a tuple (key, cumulative_cost)
-            key_current_node, cost_node = queue.remove()
-            if (key_current_node == key_node_goal):
-                reached_goal, cumulative_cost_goal = True, cost_node
-                break
+    queue.insert(start, 0)
+    path = []
+    while queue:
+        # cost, node = queue.get()
+        node = queue.remove()
+        # path.append(node.name)
+        cost = node.f
+        if node.name not in visited:
+            visited.add(node.name)
 
-            if verbose:
-                # shows a friendly message
-                print('Expands node \'%s\' with cumulative cost %s ...' % (key_current_node, cost_node))
-                time.sleep(time_sleep)
-
-            # get all successors of key_current_node
-            keys_successors = graph.getSuccessors(key_current_node)
-
-            if keys_successors:  # checks if contains successors
-                # insert all successors of key_current_node in the queue
-                for key_sucessor in keys_successors:
-                    cumulative_cost = graph.getWeightEdge(key_current_node, key_sucessor) + cost_node
-                    queue.insert((key_sucessor, cumulative_cost), cumulative_cost)
-
-        if (reached_goal):
-            print('\nReached goal! Cost: %s\n' % cumulative_cost_goal)
-        else:
-            print('\nUnfulfilled goal.\n')
-
+            if node.name == goal:
+                path = []
+                # print(type(node.name))
+                # print(type(start.name))
+                # d = node.name
+                while node != start:
+                    path.append(node.name + ': ' + str(node.f))
+                    node = node.parent
+                    # d = node
+                path.append(s + ': ' + str(start.f))
+                print(path[::-1])
+                # print(graph.)
+                return
+            for i in graph.get(node.name):
+                if i not in visited:
+                    total_cost = cost + graph.get(node.name, i)
+                    tmp = Node(i, None)
+                    tmp.f = total_cost
+                    tmp.parent = node
+                    queue.insert(tmp, total_cost)
+    # print(graph.get(goal))
 
 if __name__ == "__main__":
-    # build the graph...
-    # adds nodes in the graph
-    graph = Graph()
-    graph.addNode('S')  # start
-    graph.addNode('a')
-    graph.addNode('b')
-    graph.addNode('c')
-    graph.addNode('d')
-    graph.addNode('e')
-    graph.addNode('f')
-    graph.addNode('G')  # goal
-    graph.addNode('h')
-    graph.addNode('p')
-    graph.addNode('q')
-    graph.addNode('r')
-    # linking the nodes
-    graph.connect('S', 'd', 3)
-    graph.connect('S', 'e', 9)
-    graph.connect('S', 'p', 1)
-    graph.connect('b', 'a', 2)
-    graph.connect('c', 'a', 2)
-    graph.connect('d', 'b', 1)
-    graph.connect('d', 'c', 8)
-    graph.connect('d', 'e', 2)
-    graph.connect('e', 'h', 8)
-    graph.connect('e', 'r', 2)
-    graph.connect('f', 'c', 3)
-    graph.connect('f', 'G', 2)
-    graph.connect('h', 'p', 4)
-    graph.connect('h', 'q', 4)
-    graph.connect('p', 'q', 15)
-    graph.connect('r', 'f', 1)
 
-    run(graph=graph, key_node_start='S', key_node_goal='G', verbose=True, time_sleep=2)
+    graph = Graph()
+
+    Romania = [['Arad', 'Zerind', 75], ['Arad', 'Timisoara', 118], ['Arad', 'Sibiu', 140],
+               ['Zerind', 'Oradea', 71], ['Timisoara', 'Lugoj', 111], ['Oradea', 'Sibiu', 151],
+               ['Sibiu', 'Rimnicu Vilcea', 80], ['Sibiu', 'Fagaras', 99], ['Lugoj', 'Mehadia', 70],
+               ['Mehadia', 'Drobeta', 75], ['Drobeta', 'Craiova', 120], ['Craiova', 'Rimnicu Vilcea', 146],
+               ['Craiova', 'Pitesti', 138], ['Rimnicu Vilcea', 'Pitesti', 97], ['Pitesti', 'Bucharest', 101],
+               ['Bucharest', 'Fagaras', 211], ['Bucharest', 'Giurgiu', 90], ['Bucharest', 'Urziceni', 85],
+               ['Urziceni', 'Hirsova', 98], ['Urziceni', 'Vaslui', 142], ['Hirsova', 'Eforie', 82],
+               ['Vaslui', 'Iasi', 92], ['Iasi', 'Neamt', 87]
+               ]
+    for city in Romania:
+        graph.connect(city[0], city[1], city[2])
+
+    graph.make_undirected()
+
+    ucs(graph, 'Arad', 'Bucharest')
